@@ -9,6 +9,11 @@ public class Joke {
     private String Joke;
     private String PunchLine;
 
+    public Joke( String joke, String punchLine){
+        Joke = joke;
+        PunchLine = punchLine;
+    }
+
     public String getJoke(){
         return Joke;
     }
