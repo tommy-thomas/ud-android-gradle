@@ -11,6 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_weight="1"
-        android:padding="8dpgit stat"
+        android:padding="8dp"
         android:text="TextView" />
 </LinearLayout>

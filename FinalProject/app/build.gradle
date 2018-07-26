@@ -47,7 +47,10 @@ dependencies {
     })
 
     testImplementation 'junit:junit:4.12'
-
-    compile project(':fun')
     compile project(':jokeactivity')
+}
+
+dependencies{
+    compile project(':fun')
+    compile project(':backend')
 }
