@@ -9,7 +9,6 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -30,18 +29,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "TMoney"));
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-
-
         return true;
     }
 
@@ -65,10 +58,7 @@ public class MainActivity extends AppCompatActivity {
         Funny funny = new Funny();
         Joke joke = funny.getJoke(0);
 
-        //Toast.makeText(this, joke.getJoke(), Toast.LENGTH_SHORT).show();
-        Intent jokeIntent = new Intent(this , MainJokeActivity.class);
-        jokeIntent.putExtra("joke" , joke.getJoke());
-        startActivity( jokeIntent );
+        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, joke.getJoke()));
 
     }
 
@@ -95,7 +85,6 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
                         }
                     });
             // end options for devappserver
-
             myApiService = builder.build();
         }
 
@@ -111,6 +100,10 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
 
     @Override
     protected void onPostExecute(String result) {
-        Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, joke.getJoke(), Toast.LENGTH_SHORT).show();
+        Intent jokeIntent = new Intent(context , MainJokeActivity.class);
+        jokeIntent.putExtra("joke" , result);
+        context.startActivity( jokeIntent );
     }
 }
