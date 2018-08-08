@@ -56,7 +56,7 @@
                 <form>
                     <div class="input-group">
                         <input type="text" class="form-control input-lg" placeholder="Name"
-                               id="nameInput"/>
+                               id="jokeInput"/>
                         <span class="input-group-btn">
                              <button class="btn btn-default btn-primary btn-group btn-lg"
                                      type="submit" id="helloButton">Say "Hello" &raquo;</button>
@@ -89,8 +89,8 @@
     // A function that attaches a "Say Hello" button click handler
     function enableClick() {
       document.getElementById('helloButton').onclick = function() {
-        var name = document.getElementById('nameInput').value;
-        gapi.client.myApi.sayHi({'name': name}).execute(
+        var joke = document.getElementById('jokeInput').value;
+        <gapi class="client myApi tellJoke"></gapi>({'joke': joke}).execute(
           function(response) {
             var outputAlertDiv = document.getElementById('outputAlert');
             outputAlertDiv.style.visibility = 'visible';

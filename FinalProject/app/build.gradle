@@ -67,13 +67,13 @@ dependencies {
 
     compile 'com.android.support:support-v4:27.1.1'
 
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support:support-annotations:25.1.0'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
-    androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile 'com.android.support.test:runner:0.5'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support:support-annotations:25.1.0'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:2.2.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:2.2.2'
+    androidTestImplementation 'com.android.support.test:rules:0.5'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
 
     project(':fun') {
         dependencies {
@@ -87,6 +87,30 @@ dependencies {
 
 }
 
+// http://kevlaichungsing.blogspot.com/2016/03/android-app-build-it-bigger.html
 
 
+task RunAppEngineAndTest {
+    dependsOn(['startAppEngine','runTests','stopAppEngine'])
 
+    doFirst{
+        'startAppEngine'
+    }
+
+    doLast{
+        'stopAppEngine'
+    }
+}
+
+task startAppEngine {
+    dependsOn ':backend:appengineStart'
+}
+
+task runTests {
+    dependsOn ':app:connectedAndroidTest'
+    mustRunAfter 'startAppEngine'
+}
+
+task stopAppEngine {
+    dependsOn ':backend:appengineStop'
+}
