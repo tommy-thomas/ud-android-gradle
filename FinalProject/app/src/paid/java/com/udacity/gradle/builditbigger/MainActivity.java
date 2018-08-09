@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         Funny funny = new Funny();
         Joke joke = funny.getJoke(0);
 
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, joke.getJoke()));
+        new EndpointsAsyncTask().execute(new Pair<Context, String>(getApplicationContext(), joke.getJoke()));
 
     }
 
