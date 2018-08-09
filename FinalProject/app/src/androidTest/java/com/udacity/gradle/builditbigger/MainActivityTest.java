@@ -63,7 +63,7 @@ public class MainActivityTest {
         }
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.tv_joke), withText("Hi, What's black and white and red all over?"),
+                allOf(withId(R.id.tv_joke), withText("What's black and white and red all over?"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
