@@ -22,6 +22,9 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
+    public String mJoke;
+    private final static String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,52 +53,59 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     public void tellJoke(View view) {
 
         new EndpointsAsyncTask().execute(getApplicationContext());
 
     }
 
-}
+    public void sendJoke( ) {
+        Intent jokeIntent = new Intent(this, MainJokeActivity.class);
+        jokeIntent.putExtra("joke" , mJoke);
+        this.startActivity( jokeIntent );
+    }
 
-class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
-    private static MyApi myApiService = null;
-    private Context context;
 
-    @Override
-    protected String doInBackground(Context...params) {
-        if(myApiService == null) {  // Only do this once
-            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
-                    new AndroidJsonFactory(), null)
-                    // options for running against local devappserver
-                    // - 10.0.2.2 is localhost's IP address in Android emulator
-                    // - turn off compression when running against local devappserver
-                    .setRootUrl("http://10.0.2.2:8080/_ah/api/")
-                    .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                        @Override
-                        public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                            abstractGoogleClientRequest.setDisableGZipContent(true);
-                        }
-                    });
-            // end options for devappserver
-            myApiService = builder.build();
+    private class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
+        private MyApi myApiService = null;
+        private Context context;
+
+        @Override
+        protected String doInBackground(Context...params) {
+            if(myApiService == null) {  // Only do this once
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
+                        new AndroidJsonFactory(), null)
+                        // options for running against local devappserver
+                        // - 10.0.2.2 is localhost's IP address in Android emulator
+                        // - turn off compression when running against local devappserver
+                        .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                            @Override
+                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
+                                abstractGoogleClientRequest.setDisableGZipContent(true);
+                            }
+                        });
+                // end options for devappserver
+                myApiService = builder.build();
+            }
+
+            //context = params[0];
+
+            try {
+                return myApiService.tellJoke().execute().getData();
+            } catch (IOException e) {
+                return e.getMessage();
+            }
         }
 
-        context = params[0];
-
-        try {
-            return myApiService.tellJoke().execute().getData();
-        } catch (IOException e) {
-            return e.getMessage();
+        @Override
+        protected void onPostExecute(String result) {
+            mJoke = result;
+            sendJoke();
         }
     }
 
-    @Override
-    protected void onPostExecute(String result) {
-        //Toast.makeText(context, result, Toast.LENGTH_LONG).show();
-        //Toast.makeText(this, joke.getJoke(), Toast.LENGTH_SHORT).show();
-        Intent jokeIntent = new Intent(context , MainJokeActivity.class);
-        jokeIntent.putExtra("joke" , result);
-        context.startActivity( jokeIntent );
-    }
 }
+
+

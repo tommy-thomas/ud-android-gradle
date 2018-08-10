@@ -20,7 +20,7 @@ public class MainJokeActivity extends AppCompatActivity {
         ProgressBar pgsBar = (ProgressBar)findViewById(R.id.progress_loader);
 
         Intent jokeIntent = getIntent();
-        if( jokeIntent != null){
+        if( jokeIntent != null && jokeIntent.hasExtra("joke") ){
             String joke = jokeIntent.getStringExtra("joke");
             jokeView.setText( joke );
             jokeView.setVisibility(View.VISIBLE);
