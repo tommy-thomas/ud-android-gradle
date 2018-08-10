@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +15,6 @@ import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
-import org.udandroid.fun.Funny;
-import org.udandroid.fun.Joke;
 import org.udandroid.jokeactivity.MainJokeActivity;
 
 import java.io.IOException;
@@ -55,21 +52,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void tellJoke(View view) {
 
-        Funny funny = new Funny();
-        Joke joke = funny.getJoke(0);
-
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(getApplicationContext(), joke.getJoke()));
+        new EndpointsAsyncTask().execute(getApplicationContext());
 
     }
 
 }
 
-class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
+class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
 
     @Override
-    protected String doInBackground(Pair<Context, String>... params) {
+    protected String doInBackground(Context...params) {
         if(myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -87,11 +81,10 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
             myApiService = builder.build();
         }
 
-        context = params[0].first;
-        String joke = params[0].second;
+        context = params[0];
 
         try {
-            return myApiService.tellJoke(joke).execute().getData();
+            return myApiService.tellJoke().execute().getData();
         } catch (IOException e) {
             return e.getMessage();
         }

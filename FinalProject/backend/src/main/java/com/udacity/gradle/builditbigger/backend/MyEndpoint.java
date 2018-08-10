@@ -4,7 +4,8 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 
-import javax.inject.Named;
+import org.udandroid.fun.Funny;
+import org.udandroid.fun.Joke;
 
 /** An endpoint class we are exposing */
 @Api(
@@ -21,10 +22,11 @@ public class MyEndpoint {
 
     /** A simple endpoint method that takes a name and says Hi back */
     @ApiMethod(name = "tellJoke")
-    public MyBean tellJoke(@Named("joke") String joke) {
-        MyBean response = new MyBean();
-        response.setData(joke);
-
+    public MyBean tellJoke() {
+      MyBean response = new MyBean();
+        Funny funny = new Funny();
+        Joke joke = funny.getJoke(0);
+        response.setData( joke.getJoke() );
         return response;
     }
 }
